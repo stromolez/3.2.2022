@@ -55,7 +55,7 @@ import java.util.List;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
-
+//SSS
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
     private Object permissionDeniedResponse;
