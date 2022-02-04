@@ -2,6 +2,7 @@ package com.pavol.svancarek;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
@@ -36,6 +37,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -55,7 +57,7 @@ import java.util.List;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
-//SSSjda
+    //SSS
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
     private Object permissionDeniedResponse;
@@ -179,12 +181,40 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     private class ForegroundOnlyBroadcastReceiver extends BroadcastReceiver {
 
-        @Overrideandroid.permission.ACCESS_BACKGROUND_LOCATION
+        private Marker actual;
+
+
+        @Override
         public void onReceive(Context context, Intent intent) {
             Location location = intent.getParcelableExtra(StromolezLocationService.EXTRA_LOCATION);
 
             if (location != null) {
-                Log.e("STROMOLEZ", "Foreground location: " + location.getLongitude() + " : " + location.getLatitude());
+                LatLng position = new LatLng(location.getLatitude(), location.getLongitude());
+                if (actual != null) {
+                    actual.remove();
+                }
+
+                actual = mMap.addMarker(
+
+                        new MarkerOptions()
+                                .position(position)
+                                .title("TU SI")
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_launcher_background))
+                );
+
+
+                mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(@NonNull Marker marker) {
+                        if (marker == actual) {
+                            BottomSheet modalBottomSheet = new BottomSheet(position);
+                            modalBottomSheet.show(getSupportFragmentManager(), "TAG");
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                });
             }
         }
     }

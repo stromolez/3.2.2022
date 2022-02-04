@@ -59,7 +59,8 @@ public class StromolezLocationService extends Service {
                 .setInterval(TimeUnit.SECONDS.toMillis(15))
                 .setFastestInterval(TimeUnit.SECONDS.toMillis(5))
                 .setMaxWaitTime(TimeUnit.MINUTES.toMinutes(2))
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+                .setPriority(LocationRequest.PRIORITY_LOW_POWER)
+                .setSmallestDisplacement(1);
 
         callback = new LocationCallback() {
             @Override
