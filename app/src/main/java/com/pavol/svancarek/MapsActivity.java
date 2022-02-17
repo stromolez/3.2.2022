@@ -124,6 +124,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+
     }
 
     private void checkMyPermission() {
@@ -199,8 +200,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         new MarkerOptions()
                                 .position(position)
                                 .title("TU SI")
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_launcher_background))
-                );
+                                .visible(true)
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.abc)));
 
 
                 mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {

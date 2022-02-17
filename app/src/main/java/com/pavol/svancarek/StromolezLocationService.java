@@ -56,10 +56,10 @@ public class StromolezLocationService extends Service {
         notificationManager = getSystemService(NotificationManager.class);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         locationRequest = LocationRequest.create()
-                .setInterval(TimeUnit.SECONDS.toMillis(15))
-                .setFastestInterval(TimeUnit.SECONDS.toMillis(5))
-                .setMaxWaitTime(TimeUnit.MINUTES.toMinutes(2))
-                .setPriority(LocationRequest.PRIORITY_LOW_POWER)
+                .setInterval(TimeUnit.SECONDS.toMillis(1))
+                .setFastestInterval(TimeUnit.SECONDS.toMillis(1))
+                .setMaxWaitTime(TimeUnit.SECONDS.toMillis(2))
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setSmallestDisplacement(1);
 
         callback = new LocationCallback() {
@@ -108,7 +108,9 @@ public class StromolezLocationService extends Service {
         cancelIntent.putExtra(EXTRA_CANCEL_LOCATION_TRACKING_FROM_NOTIFICATION, true);
 
         PendingIntent servicePendingIntent = PendingIntent.getService(
-                this, 0, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                this, 0,
+                new Intent(this, CleanupService.class),
+                PendingIntent.FLAG_CANCEL_CURRENT);
 
         PendingIntent activityPendingIntent = PendingIntent.getActivity(
                 this, 0, launchActivityIntent, PendingIntent.FLAG_MUTABLE);
@@ -128,9 +130,9 @@ public class StromolezLocationService extends Service {
                         activityPendingIntent
                 )
                 .addAction(
-                        R.drawable.ic_launcher_background,
-                        "STOP",
+                        R.drawable.ic_launcher_background, "STOP",
                         servicePendingIntent
+
                 )
                 .build();
     }
