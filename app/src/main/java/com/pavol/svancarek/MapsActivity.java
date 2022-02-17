@@ -27,6 +27,7 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
@@ -41,6 +42,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.DexterBuilder;
 import com.karumi.dexter.MultiplePermissionsReport;
@@ -124,8 +126,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-    }
 
+    }
     private void checkMyPermission() {
 
         Dexter.withContext(this).withPermission(Manifest.permission.ACCESS_FINE_LOCATION).withListener(new PermissionListener() {
@@ -154,7 +156,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
+    private void showBottomSheetDialog() {
 
+        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
+        bottomSheetDialog.setContentView(R.layout.bottom_sheet_dialog_layout);
+
+        ImageView img = bottomSheetDialog.findViewById(R.id.img);
+        LinearLayout copy = bottomSheetDialog.findViewById(R.id.copyLinearLayout);
+        LinearLayout share = bottomSheetDialog.findViewById(R.id.shareLinearLayout);
+        LinearLayout upload = bottomSheetDialog.findViewById(R.id.uploadLinearLayout);
+        LinearLayout download = bottomSheetDialog.findViewById(R.id.download);
+        LinearLayout delete = bottomSheetDialog.findViewById(R.id.delete);
+
+        bottomSheetDialog.show();
+    }
 
 
 
@@ -195,25 +210,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
 
                 actual = mMap.addMarker(
-
-                        new MarkerOptions()
-                                .position(position)
-                                .title("TU SI")
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_launcher_background))
+                    new MarkerOptions()
+                            .position(position)
+                            .title("TU SI")
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))
                 );
 
 
                 mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                    @Override
-                    public boolean onMarkerClick(@NonNull Marker marker) {
-                        if (marker == actual) {
-                            BottomSheet modalBottomSheet = new BottomSheet(position);
-                            modalBottomSheet.show(getSupportFragmentManager(), "TAG");
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    }
+                  @Override
+                  public boolean onMarkerClick(@NonNull Marker marker) {
+                      showBottomSheetDialog();
+                      return true;
+                  }
                 });
             }
         }

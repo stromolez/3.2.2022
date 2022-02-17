@@ -56,9 +56,9 @@ public class StromolezLocationService extends Service {
         notificationManager = getSystemService(NotificationManager.class);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         locationRequest = LocationRequest.create()
-                .setInterval(TimeUnit.SECONDS.toMillis(15))
-                .setFastestInterval(TimeUnit.SECONDS.toMillis(5))
-                .setMaxWaitTime(TimeUnit.MINUTES.toMinutes(2))
+                .setInterval(TimeUnit.SECONDS.toMillis(1))
+                .setFastestInterval(TimeUnit.SECONDS.toMillis(1))
+                .setMaxWaitTime(TimeUnit.MINUTES.toMillis(1))
                 .setPriority(LocationRequest.PRIORITY_LOW_POWER)
                 .setSmallestDisplacement(1);
 
